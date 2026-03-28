@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 # =========================================================
 # 1. Configuration
 # =========================================================
-MODEL_NAME = "cnn"      # change to "resnet" for ResNet-18
+MODEL_NAME = "resnet"      # change to "resnet" for ResNet-18
 BATCH_SIZE = 64
 LEARNING_RATE = 0.001
-NUM_EPOCHS = 10
+NUM_EPOCHS = 150
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
@@ -205,8 +205,11 @@ for epoch in range(NUM_EPOCHS):
 
 print(f"Final Test Accuracy ({MODEL_NAME}): {test_accuracies[-1]:.2f}%")
 
+# Create output directory if it does not exist
+os.makedirs("outputs", exist_ok=True)
+
 # =========================================================
-# 10. Plot loss curve
+# 10. Plot loss curve and save it
 # =========================================================
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, NUM_EPOCHS + 1), train_losses, marker='o', label='Train Loss')
@@ -216,10 +219,12 @@ plt.ylabel("Loss")
 plt.title(f"{MODEL_NAME.upper()} Loss Curve")
 plt.legend()
 plt.grid(True)
-plt.show()
+plt.tight_layout()
+plt.savefig(f"outputs/{MODEL_NAME}_loss_curve.png", dpi=300)
+plt.close()
 
 # =========================================================
-# 11. Plot accuracy curve
+# 11. Plot accuracy curve and save it
 # =========================================================
 plt.figure(figsize=(8, 5))
 plt.plot(range(1, NUM_EPOCHS + 1), train_accuracies, marker='o', label='Train Accuracy')
@@ -229,4 +234,6 @@ plt.ylabel("Accuracy (%)")
 plt.title(f"{MODEL_NAME.upper()} Accuracy Curve")
 plt.legend()
 plt.grid(True)
-plt.show()
+plt.tight_layout()
+plt.savefig(f"outputs/{MODEL_NAME}_accuracy_curve.png", dpi=300)
+plt.close()
